@@ -82,7 +82,6 @@
         btnResponse.addEventListener("click",getRepos);
         var result = [2];
         var allResult = [];
-        var response;
         async function getRepos(){
             var Organisation = org.value;
             var m =  parseInt( numRepo.value);
@@ -91,12 +90,12 @@
             i = 1
             while(result.length!=0){
                 console.log(i)
-                const url = "https://api.github.com/orgs/"+Organisation+"/repos?per_page=100&page="+i;
+                const apiUrl = "https://api.github.com/orgs/"+Organisation+"/repos?per_page=100&page="+i;
                 const response = await fetch(
-                    url, 
+                    apiUrl, 
                     {
                         headers: {
-                        authorization: "token 0da0566cbfd3b598c009624980c21336a1ff9e7d"
+                        authorization: "token 23d511c84c0786506abcade58b2fd263022d482a"
                         }
                     }
                 )
@@ -131,7 +130,7 @@
                        link, 
                     {
                         headers: {
-                        authorization: "token 0da0566cbfd3b598c009624980c21336a1ff9e7d"
+                        authorization: "token 23d511c84c0786506abcade58b2fd263022d482a"
                         }
                     }
                 )
