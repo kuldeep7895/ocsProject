@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body{
+            background-color: #660A1B;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+        #content{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            align-content: space-around;
+        }
+        label {
+            /* Other styling... */
+            text-align: right;
+            clear: both;
+            float:left;
+            margin-right:15px;
+        }
+        .form-group{
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #repo{
+            font-family: 'Akaya Telivigala', cursive;
+            font-family: 'Montserrat', sans-serif;
+            margin-right: 40px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            margin-left: 550px;
+            color:coral;
+            font-size: large;
+        }
+        #contri{
+            margin-left: 700px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1>OCS Assignment</h1>
+        <div class="form-group">
+            <label for="org">Organisation</label>
+            <input type="text" id = "org" name="org">
+        </div>
+        <div class="form-group">
+            <label for="org">m</label>
+            <input type="text" style="margin-left: 85px;" id = "m" name="org">
+        </div>
+        <div class="form-group">
+            <label for="org" style="margin-right: 105px;">n</label>
+            <input type="text" id = "n" name="org">
+        </div>
+        <button id = "myBtn" style="margin-top: 10px;font-size:large;margin-left:20px">Get Commiters</button>
+    </div>
+
+    <div id = "res">
+           
+    </div>
+    
+    <script>
+        const btnResponse = document.getElementById("myBtn");
+        const org = document.getElementById("org");
+        const numRepo = document.getElementById("m");
+        const numCommi = document.getElementById("n");
+        const writeDiv = document.getElementById("res")
+        btnResponse.addEventListener("click",getRepos);
+        var result = [2];
+        var allResult = [];
+        var response;
+        async function getRepos(){
+            var Organisation = org.value;
+            var m =  parseInt( numRepo.value);
+            var n =  parseInt( numCommi.value);
+            //const url = "https://api.github.com/search/repositories?q=stars:>100000";
+            i = 1
+            while(result.length!=0){
+                console.log(i)
+                const url = "https://api.github.com/orgs/"+Organisation+"/repos?per_page=100&page="+i;
+                const response = await fetch(
+                    url, 
+                    {
+                        headers: {
+                        authorization: "token 0da0566cbfd3b598c009624980c21336a1ff9e7d"
+                        }
+                    }
+                )
+
+                result = await response.json();
+                if(result.length!=0){
+                    allResult = allResult.concat(result);
+                }
+                i++
+            }
+
+            allResult.sort(function(x, y) {
+                if (x.forks_count < y.forks_count) {
+                  return 1;
+                }
+                if (x.forks_count > y.forks_count) {
+                  return -1;
+                }
+                return 0;
+              });
+            var i = 0;
+            
+            while(i<m&&i<allResult.length){
+                writeDiv.innerHTML = writeDiv.innerHTML+'<div id = "repo">&#9632 '+allResult[i].full_name+"</div>"
+                console.log(allResult[i].full_name)
+                var res = [2];
+                var allContributors = [];
+                var p = 1;
+                while(res.length!=0){
+                    var link = "https://api.github.com/repos/"+allResult[i].full_name+"/contributors?per_page=100&page="+p;
+                    var resp = await fetch(
+                       link, 
+                    {
+                        headers: {
+                        authorization: "token 0da0566cbfd3b598c009624980c21336a1ff9e7d"
+                        }
+                    }
+                )
+                res = await resp.json()
+                if(res.length!=0){
+                    allContributors = allContributors.concat(res);
+                }
+                //console.log(res);
+                p++;
+                }
+                
+                if(allContributors.constructor === Array){
+                  var j = 0
+                while(j<n&&j<allContributors.length){
+                    console.log(allContributors[j].login)
+                    writeDiv.innerHTML = writeDiv.innerHTML+'<div id="contri">&#9675 '+allContributors[j].login+"</div>"
+
+                    j++;
+                }
+            }
+                i++;
+                console.log(i)
+            }
+        }
+    </script>
+</body>
+</html>
