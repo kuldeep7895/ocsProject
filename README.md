@@ -10,3 +10,7 @@ For retrieving top commiters one needs:
 2. Personal Access Token [See here ](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
 
 Just Enter the organisation name, number of repos required and number of top commiters and press button
+
+Note:
+
+- It might take some time to show result as it uses api and depends on the time API takes to return results
