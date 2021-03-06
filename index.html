@@ -90,7 +90,8 @@
 	var result = [2]; // stores the response for one page 
 	var allResult = []; // stores the response of all pages 
 	async function getRepos() {
-		var tokenGet = tokenResponse.value;
+        try{
+            var tokenGet = tokenResponse.value;
 		var Organisation = org.value;
 		var m = parseInt(numRepo.value);
 		var n = parseInt(numCommi.value);
@@ -105,6 +106,13 @@
 					authorization: "token " + tokenGet,
 				},
 			});
+            //if (typeof response !== 'undefined'){
+             //   return;
+            //}
+            if(!response.ok){
+                writeDiv.innerHTML = writeDiv.innerHTML + 'Something does not look good with the inputs ' + "</div>";
+                return;
+            }
 			result = await response.json();
 			// if there is result than add to allResult arraylist  
 			if(result.length != 0) {
@@ -149,13 +157,18 @@
 				var j = 0;
 				while(j < n && j < allContributors.length) {
 					console.log(allContributors[j].login);
-					writeDiv.innerHTML = writeDiv.innerHTML + '<div id="contri">&#9675 ' + allContributors[j].login + "</div>";
+					writeDiv.innerHTML = writeDiv.innerHTML + '<div id="contri">&#9675 ' + allContributors[j].login +"Count: "+allContributors[j].contributions+ "</div>";
 					j++;
 				}
 			}
 			i++;
 			console.log(i);
 		}
+        }
+        catch(err){
+
+        }
+		
 	}
 	</script>
 </body>
